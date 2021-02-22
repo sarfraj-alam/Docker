@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  dbos:
+    image: mysql
+    volumes:
+      - mysql_storage_new:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: saif
+      MYSQL_PASSWORD: centos
+      MYSQL_DATABASE: mydb
+
+
+  wpos:    
+    image: wordpress
+    restart: always
+    depends_on: 
+      - dbos
+    ports:
+      - 8081:80
+    environment:
+      WORDPRESS_DB_HOST: dbos
+      WORDPRESS_DB_USER: saif
+      WORDPRESS_DB_PASSWORD: centos
+      WORDPRESS_DB_NAME: mydb
+    volumes:
+      - wp_storage_new:/var/www/html
+
+volumes:
+  wp_storage_new:
+  mysql_storage_new:
